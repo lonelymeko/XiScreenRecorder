@@ -2,18 +2,19 @@
 set -e
 
 # ============================================================
-#  ScreenRecorder — 编译并打包为 DMG
+#  玺录屏 XiScreenRecorder — 编译并打包为 DMG
 # ============================================================
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-APP_NAME="ScreenRecorder"
-BUNDLE_ID="com.screenrecorder.app"
+APP_NAME="XiScreenRecorder"
+APP_DISPLAY_NAME="玺录屏"
+BUNDLE_ID="com.xiscreenrecorder.app"
 VERSION="1.0.0"
 BUILD_DIR="$PROJECT_DIR/.build/release"
 DIST_DIR="$PROJECT_DIR/dist"
-APP_BUNDLE="$DIST_DIR/$APP_NAME.app"
-DMG_NAME="$APP_NAME-$VERSION"
+APP_BUNDLE="$DIST_DIR/$APP_DISPLAY_NAME.app"
+DMG_NAME="${APP_DISPLAY_NAME}-${VERSION}"
 DMG_PATH="$DIST_DIR/$DMG_NAME.dmg"
 
 echo "🔨 Step 1: 编译 Release 版本..."
@@ -43,9 +44,9 @@ cat > "$APP_BUNDLE/Contents/Info.plist" << PLISTEOF
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>$APP_NAME</string>
+    <string>$APP_DISPLAY_NAME</string>
     <key>CFBundleDisplayName</key>
-    <string>Screen Recorder</string>
+    <string>$APP_DISPLAY_NAME</string>
     <key>CFBundleIdentifier</key>
     <string>$BUNDLE_ID</string>
     <key>CFBundleVersion</key>
@@ -67,11 +68,11 @@ cat > "$APP_BUNDLE/Contents/Info.plist" << PLISTEOF
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
     <key>NSScreenCaptureUsageDescription</key>
-    <string>Screen Recorder 需要屏幕录制权限来捕获屏幕内容</string>
+    <string>玺录屏需要屏幕录制权限来捕获屏幕内容</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Screen Recorder 需要麦克风权限来录制音频</string>
+    <string>玺录屏需要麦克风权限来录制音频</string>
     <key>NSAppleEventsUsageDescription</key>
-    <string>Screen Recorder 需要此权限来控制系统功能</string>
+    <string>玺录屏需要此权限来控制系统功能</string>
 </dict>
 </plist>
 PLISTEOF
@@ -199,7 +200,7 @@ cp -R "$APP_BUNDLE" "$DMG_TEMP/"
 ln -sf /Applications "$DMG_TEMP/Applications"
 
 # 创建 DMG
-hdiutil create -volname "$APP_NAME" \
+hdiutil create -volname "$APP_DISPLAY_NAME" \
     -srcfolder "$DMG_TEMP" \
     -ov -format UDZO \
     "$DMG_PATH" 2>&1
@@ -216,7 +217,7 @@ if [ -f "$DMG_PATH" ]; then
     echo "  📀 DMG: $DMG_PATH"
     echo "  📊 大小: $DMG_SIZE"
     echo ""
-    echo "  双击 DMG 文件, 将 $APP_NAME 拖入 Applications 即可安装"
+    echo "  双击 DMG 文件, 将「$APP_DISPLAY_NAME」拖入 Applications 即可安装"
     echo "============================================================"
 else
     echo "❌ DMG 创建失败"

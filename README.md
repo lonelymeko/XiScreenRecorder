@@ -1,12 +1,16 @@
-# ScreenRecorder - macOS 原生屏幕录制工具
+# 玺录屏 XiScreenRecorder
 
-基于 FFmpeg 的 macOS 原生屏幕录制应用，使用 SwiftUI 构建。
+> macOS 原生屏幕录制工具，基于 FFmpeg + SwiftUI 构建。
+
+[![Platform](https://img.shields.io/badge/platform-macOS%2013%2B-blue)](https://www.apple.com/macos/)
+[![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange)](https://swift.org)
+[![License](https://img.shields.io/badge/license-MIT-green)](#)
 
 ## ✨ 功能特性
 
 - 🖥 **屏幕录制** — 录制整个屏幕或自定义框选区域
 - 🔊 **系统声音录制** — 录制系统音频（需要虚拟音频设备）
-- 🎙 **麦克风控制** — 录制过程中可随时开启/关闭麦克风
+- 🎙 **麦克风控制** — 录制过程中可随时开启/关闭，支持多设备选择
 - 🎬 **多种录制模式**:
   - 仅录制屏幕
   - 屏幕 + 系统声音
@@ -16,7 +20,9 @@
   - 视频质量 (低/中/高)
   - 帧率 (15/24/30/60 FPS)
   - 输出格式 (MP4/MOV/MKV/MP3/AAC)
+- 🎨 **仿系统设置 UI** — NavigationSplitView 左右分栏，无标题栏设计
 - 📋 **实时日志** — 查看 FFmpeg 录制详情
+- ⬇️ **自动安装 FFmpeg** — 首次启动自动检测，支持 Homebrew 或静态包安装
 
 ## 📋 前置要求
 
@@ -78,7 +84,15 @@ swift run
 open Package.swift
 ```
 
-## 🛠 构建发布版本
+## � 打包 DMG
+
+```bash
+chmod +x scripts/build-dmg.sh
+./scripts/build-dmg.sh
+# 产物: dist/玺录屏-1.0.0.dmg
+```
+
+## �🛠 构建发布版本
 
 ```bash
 swift build -c release
@@ -90,21 +104,23 @@ swift build -c release
 ```
 Sources/
 ├── App.swift                    # 应用入口
-├── ContentView.swift            # 主界面 UI
+├── ContentView.swift            # 主界面 UI（NavigationSplitView 分栏）
 ├── Models.swift                 # 数据模型和枚举
-├── FFmpegHelper.swift           # FFmpeg 工具类
-├── RegionSelector.swift         # 区域框选功能
+├── FFmpegHelper.swift           # FFmpeg 工具类 & 自动安装
+├── RegionSelector.swift         # 区域框选功能（NSPanel overlay）
 └── ScreenRecorderManager.swift  # 录制管理核心逻辑
+scripts/
+└── build-dmg.sh                 # 打包 DMG 脚本
 ```
 
 ## 📝 使用说明
 
-1. 选择录制模式（屏幕/屏幕+声音/仅音频）
-2. 选择捕获区域（全屏/自定义区域）
-3. 按需开启麦克风
+1. 选择录制模式（屏幕 / 屏幕+声音 / 仅音频）
+2. 选择捕获区域（全屏 / 自定义区域）
+3. 点击底部麦克风图标，选择麦克风设备并开启
 4. 调整视频质量、帧率和输出格式
-5. 点击 "开始录制" 按钮
-6. 点击 "停止录制" 结束录制
+5. 点击「开始录制」按钮
+6. 点击「停止录制」结束录制
 7. 文件自动保存到指定路径（默认为桌面）
 
 ## ⚠️ 注意事项
