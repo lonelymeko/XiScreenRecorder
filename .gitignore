@@ -1,0 +1,36 @@
+# Swift Package Manager 编译产物
+.build/
+*.o
+*.d
+*.swp
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+.swiftpm/
+
+# 打包产物
+dist/
+*.dmg
+*.app
+*.pkg
+*.zip
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# 环境变量
+.env
+*.pem
+*.key
+
+# 日志
+*.log
