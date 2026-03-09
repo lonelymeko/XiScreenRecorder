@@ -53,7 +53,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        return true
+        // 返回 false，因为区域选择时需要隐藏主窗口，如果返回 true 会导致应用退出
+        return false
     }
     
     @objc func windowDidResize(_ notification: Notification) {

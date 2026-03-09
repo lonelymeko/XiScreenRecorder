@@ -14,19 +14,18 @@ class RegionSelectionPanel: NSPanel {
     convenience init(screen: NSScreen) {
         self.init(
             contentRect: screen.frame,
-            styleMask: [.borderless, .nonactivatingPanel],
+            styleMask: [.borderless],
             backing: .buffered,
             defer: false
         )
         
         self.setFrame(screen.frame, display: true)
-        self.level = .screenSaver  // 高层级确保在最前面
+        self.level = .statusBar + 1  // 足够高但不用 screenSaver
         self.isOpaque = false
         self.backgroundColor = .clear
         self.ignoresMouseEvents = false
         self.acceptsMouseMovedEvents = true
         self.hasShadow = false
-        self.isFloatingPanel = true
         self.hidesOnDeactivate = false
         self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         
@@ -161,7 +160,7 @@ class RegionSelector {
             completion(nil)
             return
         }
-        
+
         let panel = RegionSelectionPanel(screen: screen)
         activePanel = panel  // 保持强引用
         
@@ -174,6 +173,11 @@ class RegionSelector {
             completion(nil)
         }
         
+        // 确保应用处于激活状态，然后显示 panel
+        NSApplication.shared.activate(ignoringOtherApps: true)
         panel.makeKeyAndOrderFront(nil)
+        // 双重保险：确保 panel 成为 key window
+        panel.makeFirstResponder(panel.contentView)
+        print("📐 区域选择面板已显示: frame=\(panel.frame), isVisible=\(panel.isVisible), isKeyWindow=\(panel.isKeyWindow)")
     }
 }

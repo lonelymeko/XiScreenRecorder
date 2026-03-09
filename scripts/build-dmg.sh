@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 APP_NAME="XiScreenRecorder"
 APP_DISPLAY_NAME="玺录屏"
+EXECUTABLE_NAME="ScreenRecorder"   # SPM target 名，编译产物实际文件名
 BUNDLE_ID="com.xiscreenrecorder.app"
 VERSION="1.0.0"
 BUILD_DIR="$PROJECT_DIR/.build/release"
@@ -20,7 +21,7 @@ DMG_PATH="$DIST_DIR/$DMG_NAME.dmg"
 echo "🔨 Step 1: 编译 Release 版本..."
 cd "$PROJECT_DIR"
 swift build -c release 2>&1
-EXECUTABLE="$BUILD_DIR/$APP_NAME"
+EXECUTABLE="$BUILD_DIR/$EXECUTABLE_NAME"
 
 if [ ! -f "$EXECUTABLE" ]; then
     echo "❌ 编译失败: 找不到 $EXECUTABLE"
@@ -35,7 +36,7 @@ mkdir -p "$APP_BUNDLE/Contents/MacOS"
 mkdir -p "$APP_BUNDLE/Contents/Resources"
 
 # 复制可执行文件
-cp "$EXECUTABLE" "$APP_BUNDLE/Contents/MacOS/$APP_NAME"
+cp "$EXECUTABLE" "$APP_BUNDLE/Contents/MacOS/$EXECUTABLE_NAME"
 
 # 创建 Info.plist
 cat > "$APP_BUNDLE/Contents/Info.plist" << PLISTEOF
@@ -56,7 +57,7 @@ cat > "$APP_BUNDLE/Contents/Info.plist" << PLISTEOF
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleExecutable</key>
-    <string>$APP_NAME</string>
+    <string>$EXECUTABLE_NAME</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>LSMinimumSystemVersion</key>

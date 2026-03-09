@@ -201,14 +201,21 @@ class ScreenRecorderManager: ObservableObject {
     }
     
     func selectRegion() {
-        // 最小化主窗口以避免遮挡
-        if let mainWindow = NSApplication.shared.mainWindow {
-            mainWindow.miniaturize(nil)
-            // 等窗口最小化后再显示选择覆盖
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                self?.showRegionSelector(restoreWindow: mainWindow)
+        print("📐 selectRegion() 被调用")
+        // 找到当前应用窗口并隐藏，避免遮挡区域选择覆盖层
+        let appWindow = NSApplication.shared.windows.first(where: {
+            $0.isVisible && !($0 is NSPanel)
+        })
+        
+        if let win = appWindow {
+            print("📐 找到主窗口: \(win), 准备隐藏")
+            win.orderOut(nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                print("📐 延迟完成，准备显示区域选择器")
+                self?.showRegionSelector(restoreWindow: win)
             }
         } else {
+            print("📐 未找到主窗口，直接显示区域选择器")
             showRegionSelector(restoreWindow: nil)
         }
     }
@@ -218,7 +225,7 @@ class ScreenRecorderManager: ObservableObject {
             DispatchQueue.main.async {
                 // 恢复主窗口
                 if let window = restoreWindow {
-                    window.deminiaturize(nil)
+                    window.makeKeyAndOrderFront(nil)
                 }
                 
                 if let rect = rect {
